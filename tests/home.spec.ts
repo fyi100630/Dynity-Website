@@ -104,7 +104,7 @@ test.describe("without JavaScript", () => {
 
   test("projects and both static artwork placements are available", async ({ page }) => {
     await page.goto("/#projects");
-    await expect(page.getByRole("heading", { name: "Continuum" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "孤島求生" })).toBeVisible();
     await expect(page.locator(fallback)).toBeVisible();
     await expect(page.locator(artwork)).toHaveCSS("transform", "none");
   });

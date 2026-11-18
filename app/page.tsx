@@ -1,12 +1,11 @@
 import Image from "next/image";
+import logo from "./assets/dynity-logo.png";
+import islandScene from "./assets/island-scene.webp";
+import islandFocus from "./assets/island-focus.webp";
+import islandTown from "./assets/island-town.webp";
 import { StoryMotion } from "./story-motion";
 
-const continuum = {
-  src: "/continuum.webp",
-  width: 1024,
-  height: 1024,
-  sizes: "(max-width: 720px) calc(100vw - 40px), (max-width: 1400px) 48vw, 650px",
-};
+const sceneSizes = "(max-width: 720px) calc(100vw - 40px), (max-width: 1400px) 48vw, 650px";
 
 export default function Home() {
   return (
@@ -14,8 +13,7 @@ export default function Home() {
       <a className="skip-link" href="#main">跳到主要內容</a>
       <header className="site-header frame" id="top">
         <a className="wordmark" href="#top" aria-label="Dynity 首頁" translate="no">
-          <span className="brand-mark" aria-hidden="true" />
-          Dynity
+          <Image src={logo} alt="" sizes="136px" />
         </a>
         <nav aria-label="主要導覽">
           <a href="#projects">作品</a>
@@ -28,16 +26,15 @@ export default function Home() {
           <StoryMotion />
           <section className="hero split" aria-labelledby="hero-title">
             <div className="hero-copy">
-              <p className="overline" lang="en">Independent Digital Design</p>
-              <h1 id="hero-title" lang="en">Ideas in<br />Motion.</h1>
-              <p className="intro">用設計與動態，讓抽象的想法變成可以探索的數位體驗。</p>
+              <h1 id="hero-title">把想法做成<br />可用的軟體</h1>
+              <p className="intro">Dynity 是一個軟體開發團隊。第一個專案《孤島求生》從每天的專注時間出發。</p>
               <a className="action" href="#projects">
                 探索作品 <span aria-hidden="true">↓</span>
               </a>
             </div>
             <div className="hero-visual" data-story-origin aria-hidden="true">
               <div className="artwork hero-artwork" data-story-artwork>
-                <Image {...continuum} alt="" preload />
+                <Image src={islandScene} sizes={sceneSizes} alt="" preload />
               </div>
             </div>
           </section>
@@ -45,49 +42,56 @@ export default function Home() {
           <section className="projects" id="projects" aria-labelledby="projects-title">
             <div className="project-feature split">
               <div className="project-copy">
-                <p className="overline" lang="en">Projects</p>
-                <h2 id="projects-title" lang="en">Selected <br />Work.</h2>
-                <article aria-labelledby="continuum-title">
-                  <p className="project-type">動態設計 · 概念作品</p>
-                  <h3 id="continuum-title" lang="en" translate="no">Continuum</h3>
-                  <p>一條連續的緞帶穿過自身。用同一件物體的位移與尺度變化，把兩個畫面接在一起。</p>
-                </article>
+                <p className="overline">第一個專案 <span>Android</span></p>
+                <h2 id="projects-title">孤島求生</h2>
+                <p className="project-name-en" lang="en" translate="no">Island Survival</p>
+                <p className="intro">完成一段專注，回到島上領取金幣、解鎖建築，把一小塊土地慢慢蓋成自己的城鎮。</p>
+                <p className="project-status">目前在 Google Play 封閉測試</p>
               </div>
               <div className="project-visual" data-story-destination aria-hidden="true">
                 <div className="artwork" data-story-fallback>
-                  <Image {...continuum} alt="" />
+                  <Image src={islandScene} sizes={sceneSizes} alt="" />
                 </div>
               </div>
             </div>
 
-            <article className="project-secondary" aria-labelledby="strata-title">
-              <div className="artwork secondary-artwork">
+            <div className="project-details">
+              <article className="feature" aria-labelledby="focus-title">
+                <div className="feature-copy">
+                  <h3 id="focus-title">留一段時間專注</h3>
+                  <p>選好計時長度和容易分心的 App。開啟封鎖模式後，專注期間會顯示封印畫面。</p>
+                </div>
                 <Image
-                  src="/strata.webp"
-                  width={1024}
-                  height={1024}
-                  sizes="(max-width: 720px) calc(100vw - 40px), 400px"
-                  alt=""
+                  className="screenshot"
+                  src={islandFocus}
+                  sizes="(max-width: 720px) 164px, 205px"
+                  alt="專注計時畫面，顯示倒數進度圈與暫停按鈕"
                 />
-              </div>
-              <div>
-                <p className="project-type">視覺設計 · 概念作品</p>
-                <h3 id="strata-title" lang="en" translate="no">Strata</h3>
-                <p>將波形轉成層疊的玻璃，在厚薄與透光的變化中呈現節奏。</p>
-              </div>
-            </article>
+              </article>
+              <article className="feature" aria-labelledby="town-title">
+                <div className="feature-copy">
+                  <h3 id="town-title">把小島蓋成城鎮</h3>
+                  <p>從一小塊土地開始，用專注取得的獎勵建造房屋，沿著島的邊緣繼續開拓。</p>
+                </div>
+                <Image
+                  className="screenshot"
+                  src={islandTown}
+                  sizes="(max-width: 720px) 164px, 205px"
+                  alt="發展後的等角島嶼，有道路、住宅和成片的建築"
+                />
+              </article>
+            </div>
           </section>
         </div>
 
         <section className="about frame" id="about" aria-labelledby="about-title">
-          <p className="overline" lang="en">About</p>
           <h2 id="about-title">關於 <span lang="en" translate="no">Dynity</span></h2>
-          <p>Dynity 是一個數位設計與互動實驗的計畫，探索動態如何連接畫面、內容與操作。</p>
+          <p>我們主要開發軟體產品。《孤島求生》是 Dynity 的第一個專案。</p>
         </section>
       </main>
 
       <footer className="site-footer frame">
-        <span className="wordmark" translate="no">Dynity</span>
+        <Image className="footer-logo" src={logo} alt="Dynity" sizes="112px" />
         <div className="footer-links">
           <a href="https://github.com/fyi100630/Dynity-Website">GitHub <span aria-hidden="true">↗</span></a>
           <a href="#top">回到頂端 <span aria-hidden="true">↑</span></a>

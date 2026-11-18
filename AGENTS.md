@@ -24,3 +24,9 @@ UI/UX Pro Max 的上游說明使用 Claude 路徑，在本倉庫從根目錄執�
 `npm run typecheck`、`npm run build` 和 `npm test`。瀏覽器測試使用已建置網站，
 第一次可用 `npx playwright install chromium` 準備瀏覽器，或以
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 指定既有 Chromium。
+
+GitHub Pages 從 `main` 的根目錄發布。執行 `npm run build:pages` 會以
+`/Dynity-Website` 為網址前綴，更新根目錄的靜態匯出檔案。更新網站時，
+將原始碼、根目錄的匯出檔案與 `.nojekyll` 一起提交到 `main`。
+本機開發用 `npm run dev`。執行一般的 `npm run build` 後，可以用
+`npm start` 預覽 `out/`，也可執行 `npm test`。

@@ -10,7 +10,7 @@ export default defineConfig({
     launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH },
   },
   webServer: {
-    command: `npm run start -- --hostname 127.0.0.1 --port ${port}`,
+    command: `npm run start -- --listen tcp://127.0.0.1:${port}`,
     url: `http://127.0.0.1:${port}`,
   },
 });

@@ -10,12 +10,12 @@ const display = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dynity — Ideas in Motion",
-  description: "Dynity 的數位設計與互動實驗。探索我們如何用動態、介面與材質表達想法。",
+  title: "Dynity | 軟體開發",
+  description: "Dynity 是一個軟體開發團隊。第一個專案《孤島求生》是一款結合專注計時與島嶼經營的 Android App。",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#101411",
+  themeColor: "#f8f8f3",
   viewportFit: "cover",
 };
 

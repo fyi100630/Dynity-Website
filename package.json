@@ -8,10 +8,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint app tests *.mjs playwright.config.ts",
+    "start": "serve out",
+    "lint": "eslint app tests scripts *.mjs playwright.config.ts",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "playwright test"
+    "test": "playwright test",
+    "build:pages": "node scripts/build-pages.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.2.10",
@@ -28,6 +29,7 @@
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "16.4.6",
+    "serve": "^14.2.8",
     "typescript": "^5.9.3"
   }
 }
