@@ -125,3 +125,24 @@ test("keyboard navigation and automated WCAG checks", async ({ page }) => {
     expect(results.violations, `Viewport width ${width}`).toEqual([]);
   }
 });
+
+test("brand and product pages are reachable from the global navigation", async ({ page }) => {
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "主要導覽" });
+  await nav.getByRole("link", { name: "關於" }).click();
+  await expect(page).toHaveURL(/\/about\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("從生活裡的問題開始開發軟體。");
+  await page.getByRole("link", { name: "查看第一個產品" }).click();
+  await expect(page).toHaveURL(/\/products\/island-survival\/$/);
+  await expect(page.getByRole("heading", { name: "孤島求生", level: 1 })).toBeVisible();
+  await expect(page.getByText("Android · Google Play 封閉測試")).toBeVisible();
+
+  const guestQuestion = page.getByText("一定要登入才能玩嗎？", { exact: true });
+  await guestQuestion.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByText(/可以用訪客模式遊玩/)).toBeVisible();
+
+  await nav.getByRole("link", { name: "支援" }).click();
+  await expect(page).toHaveURL(/\/products\/island-survival\/#support$/);
+  await expect(page.getByRole("link", { name: "寄信給產品支援" })).toHaveAttribute("href", /^mailto:/);
+});

@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import { join } from "node:path";
 
 const require = createRequire(import.meta.url);
-const files = new Set(["404", "404.html", "_next", "_not-found", "icon.png", "index.html", "index.txt"]);
+const files = new Set(["404", "404.html", "_next", "_not-found", "icon.png", "index.html", "index.txt", "about", "products"]);
 const isExport = (name) => files.has(name) || /^__next\..+\.txt$/.test(name);
 
 execFileSync(process.execPath, [require.resolve("next/dist/bin/next"), "build"], {
