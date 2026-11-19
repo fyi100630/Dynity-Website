@@ -1,72 +1,71 @@
-import Image from "next/image";
-import Link from "next/link";
-import islandScene from "./assets/island-scene.webp";
-import islandPreview from "./assets/island-preview.webp";
-import { islandUrl } from "./site";
+import { SiteLink, Arrow, JsonLd, Wordmark } from "./site";
+import { absoluteUrl, siteDescription } from "./site-config";
+import { featuredProject, projects, projectPath } from "./projects";
+import { ProjectArtwork, ProjectStatus, WorkList, projectTheme } from "./project-ui";
 import { StoryMotion } from "./story-motion";
 
-function IslandVisual({ hero = false }: { hero?: boolean }) {
-  return (
-    <div
-      className={hero ? "artwork hero-artwork" : "artwork"}
-      data-story-artwork={hero || undefined}
-      data-story-fallback={!hero || undefined}
-    >
-      <Image className="scene" src={islandScene} alt="" preload={hero} />
-      <Image className="scene-device" src={islandPreview} alt="" loading={hero ? "eager" : "lazy"} />
-    </div>
-  );
-}
-
 export default function Home() {
+  const project = featuredProject;
+
   return (
     <>
-      <div className="story" data-story>
+      <JsonLd data={{ "@context": "https://schema.org", "@type": "Organization", name: "Dynity", description: siteDescription, url: absoluteUrl("/") }} />
+      <div className="story" data-story style={projectTheme(project)}>
         <StoryMotion />
-        <section className="hero" aria-labelledby="hero-title">
-          <div className="frame split">
-            <div className="hero-copy">
-              <p className="eyebrow">Dynity 軟體開發團隊</p>
-              <h1 id="hero-title">把想法，<br />做成軟體。</h1>
-              <p className="lead">我們從日常的問題出發，做成可以親手使用的產品。第一個專案《孤島求生》，把一段段專注時間變成你能親手經營的小島。</p>
-              <div className="actions">
-                <a className="button" href="#projects">探索作品 <span aria-hidden="true">↓</span></a>
-                <Link className="text-link" href="/about/">認識 Dynity <span aria-hidden="true">↗</span></Link>
-              </div>
+        <section className="brand-hero" aria-labelledby="hero-title" data-story-hero>
+          <div className="hero-wash" data-hero-wash aria-hidden="true" />
+          <div className="shell brand-shell">
+            <div className="brand-lockup">
+              <p className="brand-intro" data-hero-copy>獨立軟體開發團隊</p>
+              <h1 className="brand-title" id="hero-title"><span data-hero-wordmark><Wordmark /></span></h1>
+              <p className="brand-tagline" data-hero-copy lang="en">We build things we wish existed.</p>
             </div>
-            <div className="hero-visual" data-story-origin aria-hidden="true">
-              <IslandVisual hero />
+            <div className="hero-bottom">
+              <a className="scroll-link" href="#featured"><span>探索作品</span><span className="scroll-icon"><Arrow direction="down" /></span></a>
             </div>
           </div>
         </section>
 
-        <section className="projects frame" id="projects" aria-labelledby="projects-title">
-          <div className="split project-feature">
-            <div className="project-copy">
-              <p className="eyebrow">我們的第一個產品</p>
-              <h2 id="projects-title">孤島求生</h2>
-              <p className="english-name" lang="en" translate="no">Island Survival</p>
-              <p className="lead">放下手機，專注一段時間。完成後回到島上領取獎勵，蓋下第一棟房子，再一步步把小島擴成自己的城鎮。</p>
-              <p className="status"><span aria-hidden="true" />Android · Google Play 封閉測試</p>
-              <Link className="button" href={islandUrl}>了解《孤島求生》 <span aria-hidden="true">↗</span></Link>
+        <section className="spotlight" id="featured" aria-labelledby="spotlight-title">
+          <div className="shell spotlight-inner">
+            <div className="spotlight-copy">
+              <div className="spotlight-meta"><span className="section-label">精選作品</span><ProjectStatus project={project} /></div>
+              <h2 id="spotlight-title" className="display spotlight-title" lang="en" translate="no">{project.englishName}</h2>
+              <p className="spotlight-line">{project.tagline ?? project.name}</p>
+              <p className="body-copy">{project.summary}</p>
+              <div className="actions">
+                {project.website && <a className="button" href={project.website}>前往產品網站 <Arrow direction="external" /></a>}
+                <SiteLink className="text-link" href={projectPath(project)}>作品介紹 <Arrow /></SiteLink>
+              </div>
             </div>
-            <div className="project-visual" data-story-destination aria-hidden="true">
-              <IslandVisual />
+            <div className="artwork-frame spotlight-artwork" data-artwork-origin>
+              <ProjectArtwork project={project} travel />
+            </div>
+          </div>
+        </section>
+
+        <section className="home-work" id="work" aria-labelledby="work-title">
+          <div className="work-wash" data-work-wash aria-hidden="true" />
+          <div className="shell">
+            <div className="section-heading home-work-heading">
+              <h2 id="work-title" className="display">作品索引</h2>
+              <SiteLink className="text-link" href="/work/">查看所有作品 <Arrow /></SiteLink>
+            </div>
+            <WorkList items={projects} sharedSlug={project.slug} />
+          </div>
+        </section>
+        <section className="home-about ink-section" id="studio" aria-labelledby="studio-title">
+          <div className="about-wash" data-about-wash aria-hidden="true" />
+          <div className="shell about-grid">
+            <h2 id="studio-title" className="display about-display" lang="en">Small ideas.<br />Real things.</h2>
+            <div>
+              <p className="section-label">關於 Dynity</p>
+              <p className="about-copy">我們是個小型獨立團隊。從平常想用、卻還找不到的東西出發，把點子做成軟體、遊戲，或一個剛好用得上的工具。</p>
+              <SiteLink className="text-link" href="/about/">認識 Dynity <Arrow /></SiteLink>
             </div>
           </div>
         </section>
       </div>
-
-      <section className="brand-section" id="about" aria-labelledby="about-title">
-        <div className="frame brand-grid">
-          <h2 id="about-title">關於 <span translate="no">Dynity</span></h2>
-          <div>
-            <p className="statement">軟體可以改變一個日常習慣。</p>
-            <p className="lead">《孤島求生》從一個具體問題開始：怎麼讓人願意放下手機，並期待下一次專注？我們把計時、回饋和島嶼經營接成同一個使用流程。</p>
-            <Link className="text-link" href="/about/">了解我們與產品開發 <span aria-hidden="true">↗</span></Link>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

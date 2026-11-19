@@ -4,11 +4,16 @@ import { createRequire } from "node:module";
 import { join } from "node:path";
 
 const require = createRequire(import.meta.url);
-const files = new Set(["404", "404.html", "_next", "_not-found", "icon.png", "index.html", "index.txt", "about", "products"]);
-const isExport = (name) => files.has(name) || /^__next\..+\.txt$/.test(name);
+const basePath = process.env.PAGES_BASE_PATH ?? "/Dynity-Website";
+const siteUrl = process.env.SITE_URL || `https://fyi100630.github.io${basePath}/`;
+const exportPaths = new Set([
+  "404", "404.html", "_headers", "_next", "_not-found", "about", "contact", "icon.png",
+  "index.html", "index.txt", "products", "robots.txt", "sitemap.xml", "social.jpg", "work",
+]);
+const isExport = (name) => exportPaths.has(name) || /^__next\..+\.txt$/.test(name);
 
 execFileSync(process.execPath, [require.resolve("next/dist/bin/next"), "build"], {
-  env: { ...process.env, PAGES_BASE_PATH: process.env.PAGES_BASE_PATH ?? "/Dynity-Website" },
+  env: { ...process.env, PAGES_BASE_PATH: basePath, SITE_URL: siteUrl },
   stdio: "inherit",
 });
 
@@ -18,7 +23,7 @@ if (unexpected.length) {
   throw new Error(`Review these new export paths before publishing: ${unexpected.join(", ")}`);
 }
 for (const name of readdirSync(".").filter(isExport)) {
-  rmSync(name, { recursive: true });
+  rmSync(name, { recursive: true, force: true });
 }
 for (const name of exported) {
   cpSync(join("out", name), name, { recursive: true });

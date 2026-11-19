@@ -16,9 +16,10 @@
 UI/UX Pro Max 的上游說明使用 Claude 路徑，在本倉庫從根目錄執行
 `python3 .agents/skills/ui-ux-pro-max/scripts/search.py` 並加上查詢參數。
 
-首頁 Hero 與 Projects 的共用主視覺以 GSAP ScrollTrigger 隨原生捲動移動。
-調整動畫時，保留靜態閱讀順序、窄螢幕排版、反向捲動及
-`prefers-reduced-motion` 和無 JavaScript 的替代畫面。
+首頁字標與精選作品畫面以 GSAP ScrollTrigger 隨原生捲動移動。調整
+`app/story-motion.tsx` 時，保留靜態閱讀順序、窄螢幕排版、反向捲動及
+`prefers-reduced-motion` 與無 JavaScript 的替代畫面。作品資料集中在
+`app/projects.ts`。設計、字型更新與 Cloudflare Pages 部署方式見 `README.md`。
 
 使用 `npm ci` 安裝網站依賴。修改後執行 `npm run lint`、
 `npm run typecheck`、`npm run build` 和 `npm test`。瀏覽器測試使用已建置網站，

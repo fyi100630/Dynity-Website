@@ -1,148 +1,185 @@
-import { AxeBuilder } from "@axe-core/playwright";
+import AxeBuilder from "@axe-core/playwright";
 import { devices, expect, test, type Page } from "@playwright/test";
 
-const origin = "[data-story-origin]";
-const artwork = "[data-story-artwork]";
-const destination = "[data-story-destination]";
-const fallback = "[data-story-fallback]";
-const { viewport: mobileViewport, deviceScaleFactor, isMobile, hasTouch, userAgent } = devices["Pixel 7"];
+const heroMark = "[data-hero-wordmark]";
+const headerSlot = "[data-header-slot]";
+const navMark = "[data-header-wordmark]";
+const origin = "[data-artwork-origin]";
+const artwork = "[data-artwork-traveler]";
+const destination = "[data-artwork-destination]";
+const desktop = { width: 1440, height: 900 };
 
 async function scroll(page: Page, top: number) {
   await page.evaluate((y) => window.scrollTo(0, y), top);
 }
 
-async function frameDelta(page: Page, target: string) {
-  return page.evaluate(({ artwork, target }) => {
-    const current = document.querySelector(artwork)!.getBoundingClientRect();
-    const expected = document.querySelector(target)!.getBoundingClientRect();
+async function distance(page: Page, from: string, to: string) {
+  return page.evaluate(({ from, to }) => {
+    const current = document.querySelector(from)!.getBoundingClientRect();
+    const target = document.querySelector(to)!.getBoundingClientRect();
     return Math.max(
-      Math.abs(current.x - expected.x),
-      Math.abs(current.y - expected.y),
-      Math.abs(current.width - expected.width),
+      Math.abs(current.x - target.x),
+      Math.abs(current.y - target.y),
+      Math.abs(current.width - target.width),
     );
-  }, { artwork, target });
+  }, { from, to });
 }
 
-for (const viewport of ["desktop", "mobile"] as const) {
-  test.describe(viewport, () => {
-    test.use(viewport === "mobile"
-      ? { viewport: mobileViewport, deviceScaleFactor, isMobile, hasTouch, userAgent }
-      : { viewport: { width: 1440, height: 900 } });
-
-    test("shared artwork follows the scroll and returns to its origin", async ({ page }) => {
-      const errors: string[] = [];
-      page.on("pageerror", (error) => errors.push(error.message));
-      await page.goto("/");
-      await expect(page.locator(fallback)).toHaveCSS("visibility", "hidden");
-      await expect.poll(() => frameDelta(page, origin)).toBeLessThan(1);
-
-      const { start, middle, end, gaps, viewportHeight } = await page.evaluate(({ origin, destination }) => {
-        const from = document.querySelector(origin)!.getBoundingClientRect();
-        const to = document.querySelector(destination)!.getBoundingClientRect();
-        const narrow = matchMedia("(max-width: 720px)").matches;
-        const start = Math.max(0, from.y - innerHeight * (narrow ? .52 : .2));
-        const end = to.y - innerHeight * (narrow ? .44 : .31);
-        return {
-          start, middle: (start + end) / 2, end,
-          gaps: document.documentElement.scrollWidth - innerWidth,
-          viewportHeight: innerHeight,
-        };
-      }, { origin, destination });
-      expect(gaps).toBe(0);
-      expect(end - start).toBeGreaterThan(viewportHeight * .35);
-
-      await scroll(page, middle);
-      await expect.poll(() => frameDelta(page, origin)).toBeGreaterThan(40);
-      await expect.poll(() => frameDelta(page, destination)).toBeGreaterThan(40);
-      const forward = await frameDelta(page, origin);
-
-      await scroll(page, end + 80);
-      await expect.poll(() => frameDelta(page, destination)).toBeLessThan(1.5);
-
-      await scroll(page, middle);
-      await expect.poll(async () => Math.abs(await frameDelta(page, origin) - forward)).toBeLessThan(1.5);
-
-      await scroll(page, 0);
-      await expect.poll(() => frameDelta(page, origin)).toBeLessThan(1);
-      expect(errors).toEqual([]);
-    });
-  });
-}
-
-test("anchors work and the artwork settles after crossing the layout breakpoint", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+test("the desktop wordmark lands in the header and retraces its path", async ({ page }) => {
+  await page.setViewportSize(desktop);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await expect(page.locator(fallback)).toHaveCSS("visibility", "hidden");
-  await page.getByRole("link", { name: "探索作品" }).click();
-  await expect(page).toHaveURL(/#projects$/);
-  await expect.poll(() => frameDelta(page, destination)).toBeLessThan(1.5);
+  await expect(page.locator(heroMark)).toHaveCSS("opacity", "0");
+  await expect.poll(() => distance(page, navMark, heroMark)).toBeLessThan(2);
 
-  await page.setViewportSize({ width: 375, height: 812 });
-  await page.locator("#projects").evaluate((section) => section.scrollIntoView());
-  await expect.poll(() => frameDelta(page, destination)).toBeLessThan(1.5);
+  await scroll(page, 175);
+  await expect.poll(() => distance(page, navMark, headerSlot)).toBeGreaterThan(80);
+  await expect.poll(() => distance(page, navMark, heroMark)).toBeGreaterThan(80);
+  await scroll(page, 475);
+  await expect.poll(() => distance(page, navMark, headerSlot)).toBeLessThan(1.5);
+
   await scroll(page, 0);
-  await expect.poll(() => frameDelta(page, origin)).toBeLessThan(1);
+  await expect.poll(() => distance(page, navMark, heroMark)).toBeLessThan(2);
+  expect(errors).toEqual([]);
 });
 
-test("changing the motion preference restores both static images", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/#projects");
-  await expect(page.locator(fallback)).toBeVisible();
-  await expect(page.locator(artwork)).toHaveCSS("transform", "none");
+test("the featured artwork moves continuously to its work row and returns", async ({ page }) => {
+  await page.setViewportSize(desktop);
+  await page.goto("/");
+  await expect(page.locator(destination)).toHaveCSS("visibility", "hidden");
+  await expect.poll(() => distance(page, artwork, origin)).toBeLessThan(1);
+  const { start, end } = await page.evaluate(({ origin, destination }) => {
+    const from = document.querySelector(origin)!.getBoundingClientRect();
+    const to = document.querySelector(destination)!.getBoundingClientRect();
+    return { start: from.y - innerHeight * .23, end: to.y - innerHeight * .60 };
+  }, { origin, destination });
+  expect(end - start).toBeGreaterThan(200);
 
+  await scroll(page, (start + end) / 2);
+  await expect.poll(() => distance(page, artwork, origin)).toBeGreaterThan(40);
+  await expect.poll(() => distance(page, artwork, destination)).toBeGreaterThan(40);
+  const middle = await distance(page, artwork, origin);
+
+  await scroll(page, end + 60);
+  await expect.poll(() => distance(page, artwork, destination)).toBeLessThan(2);
+  await scroll(page, (start + end) / 2);
+  await expect.poll(async () => Math.abs(await distance(page, artwork, origin) - middle)).toBeLessThan(2);
+
+  await scroll(page, 0);
+  await expect.poll(() => distance(page, artwork, origin)).toBeLessThan(1);
+});
+
+test("anchors, resize and motion preferences preserve access to both scenes", async ({ page }) => {
+  await page.setViewportSize(desktop);
+  await page.goto("/");
+  await page.getByRole("link", { name: "探索作品" }).click();
+  await expect(page).toHaveURL(/#featured$/);
+  await expect(page.getByRole("heading", { name: "IslandSurvival", level: 2 })).toBeInViewport();
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator(destination)).toHaveCSS("visibility", "visible");
+  await expect(page.locator(navMark)).toHaveCSS("transform", "none");
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await expect(page.locator(fallback)).toHaveCSS("visibility", "hidden");
-  await expect.poll(() => frameDelta(page, destination)).toBeLessThan(1.5);
+  await expect(page.locator(destination)).toHaveCSS("visibility", "hidden");
 
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.locator(fallback)).toBeVisible();
+  await page.setViewportSize({ width: 375, height: 812 });
+  await expect(page.locator(destination)).toHaveCSS("visibility", "visible");
   await expect(page.locator(artwork)).toHaveCSS("transform", "none");
+  await page.setViewportSize(desktop);
+  await expect(page.locator(destination)).toHaveCSS("visibility", "hidden");
+});
+
+test.describe("Android-sized touch viewport", () => {
+  const { viewport, deviceScaleFactor, isMobile, hasTouch, userAgent } = devices["Pixel 7"];
+  test.use({ viewport, deviceScaleFactor, isMobile, hasTouch, userAgent });
+
+  test("keeps navigation and project links usable in portrait and landscape", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(heroMark)).toHaveCSS("opacity", "1");
+    await expect(page.locator(destination)).toHaveCSS("visibility", "visible");
+    await page.getByRole("link", { name: "探索作品" }).tap();
+    await expect(page).toHaveURL(/#featured$/);
+    await expect(page.getByRole("link", { name: "前往產品網站" })).toHaveAttribute("href", "https://islandsurvival-intro.pages.dev/");
+    await page.getByRole("link", { name: "作品介紹" }).tap();
+    await expect(page).toHaveURL(/\/work\/island-survival\/$/);
+    await page.setViewportSize({ width: 851, height: 393 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  });
 });
 
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("projects and both static artwork placements are available", async ({ page }) => {
-    await page.goto("/#projects");
-    await expect(page.getByRole("heading", { name: "孤島求生" })).toBeVisible();
-    await expect(page.locator(fallback)).toBeVisible();
-    await expect(page.locator(artwork)).toHaveCSS("transform", "none");
+  test("exposes the hero and both static artwork placements", async ({ page }) => {
+    await page.goto("/#featured");
+    await expect(page.getByRole("heading", { name: "dynity.", level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "IslandSurvival", level: 2 })).toBeInViewport();
+    await expect(page.locator(destination)).toHaveCSS("visibility", "visible");
+    await page.getByRole("link", { name: "作品介紹" }).click();
+    await expect(page).toHaveURL(/\/work\/island-survival\/$/);
   });
 });
 
-test("keyboard navigation and automated WCAG checks", async ({ page }) => {
+test("main navigation, product support, legal links and the old URL work", async ({ page }) => {
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "主要導覽" });
+  await nav.getByRole("link", { name: "作品", exact: true }).click();
+  await expect(page).toHaveURL(/\/work\/$/);
+  await page.getByRole("link", { name: /IslandSurvival/ }).click();
+  await expect(page).toHaveURL(/\/work\/island-survival\/$/);
+  await expect(page.getByRole("heading", { name: "IslandSurvival", level: 1 })).toBeVisible();
+  await expect(page.getByText(/Google Play 即將上架/)).toBeVisible();
+  await nav.getByRole("link", { name: "關於" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Small ideas\.\s*Real things\./);
+  await nav.getByRole("link", { name: "聯絡", exact: true }).click();
+  await expect(page.getByRole("link", { name: "寄信給產品支援" })).toHaveAttribute("href", "mailto:cc20110630@gmail.com");
+  await expect(page.getByRole("link", { name: "孤島求生隱私權政策" })).toHaveAttribute("href", "https://islandsurvival-privacy.pages.dev/");
+
+  await page.goto("/products/island-survival/#support");
+  await expect(page.getByRole("heading", { name: "產品支援", level: 2 })).toBeInViewport();
+  await expect(page.getByRole("link", { name: "寄信給產品支援" })).toHaveAttribute("href", /^mailto:/);
+});
+
+test("returning from another page restores the home scroll position", async ({ page }) => {
+  await page.setViewportSize(desktop);
+  await page.goto("/");
+  await expect(page.locator(destination)).toHaveCSS("visibility", "hidden");
+  const offset = await page.locator("#work").evaluate((section) => Math.floor(section.getBoundingClientRect().top - 300));
+  await scroll(page, offset);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(offset);
+  const about = page.getByRole("navigation", { name: "主要導覽" }).getByRole("link", { name: "關於" });
+  const bounds = await about.boundingBox();
+  expect(bounds).not.toBeNull();
+  // Click the sticky link in place, without the test runner scrolling it into view.
+  await page.mouse.click(bounds!.x + bounds!.width / 2, bounds!.y + bounds!.height / 2);
+  await expect(page).toHaveURL(/\/about\/$/);
+  await page.goBack();
+  await expect(page.locator(destination)).toHaveCSS("visibility", "hidden");
+  await page.waitForFunction((saved) => window.scrollY === saved, offset);
+});
+
+test("keyboard skip link reaches the main landmark", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "跳到主要內容" })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("main")).toBeFocused();
+});
 
-  for (const width of [375, 768, 1024, 1440]) {
+test("all layouts fit narrow viewports and pass automated WCAG checks", async ({ page }) => {
+  const audit = async (path: string, width: number) => {
     await page.setViewportSize({ width, height: 900 });
+    await page.goto(path);
+    await page.evaluate(() => document.fonts.ready);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    expect(overflow, `${path} at ${width}px`).toBe(0);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       .analyze();
-    expect(results.violations, `Viewport width ${width}`).toEqual([]);
-  }
-});
+    expect(results.violations, `${path} at ${width}px`).toEqual([]);
+  };
 
-test("brand and product pages are reachable from the global navigation", async ({ page }) => {
-  await page.goto("/");
-  const nav = page.getByRole("navigation", { name: "主要導覽" });
-  await nav.getByRole("link", { name: "關於" }).click();
-  await expect(page).toHaveURL(/\/about\/$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("從生活裡的問題開始開發軟體。");
-  await page.getByRole("link", { name: "查看第一個產品" }).click();
-  await expect(page).toHaveURL(/\/products\/island-survival\/$/);
-  await expect(page.getByRole("heading", { name: "孤島求生", level: 1 })).toBeVisible();
-  await expect(page.getByText("Android · Google Play 封閉測試")).toBeVisible();
-
-  const guestQuestion = page.getByText("一定要登入才能玩嗎？", { exact: true });
-  await guestQuestion.focus();
-  await page.keyboard.press("Enter");
-  await expect(page.getByText(/可以用訪客模式遊玩/)).toBeVisible();
-
-  await nav.getByRole("link", { name: "支援" }).click();
-  await expect(page).toHaveURL(/\/products\/island-survival\/#support$/);
-  await expect(page.getByRole("link", { name: "寄信給產品支援" })).toHaveAttribute("href", /^mailto:/);
+  for (const width of [320, 375, 768, 1024, 1440]) await audit("/", width);
+  for (const path of ["/work/", "/about/", "/work/island-survival/", "/contact/"]) await audit(path, 375);
 });
