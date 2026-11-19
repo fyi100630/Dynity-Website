@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://fyi100630.github.io/Dynity-Website/sitemap.xml
