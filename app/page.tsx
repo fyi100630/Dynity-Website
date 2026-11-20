@@ -71,7 +71,7 @@ export default function Home() {
             <div>
               <p className="section-label">關於 Dynity</p>
               <p className="about-copy">我們是個小型獨立團隊。從平常想用、卻還找不到的東西出發，把點子做成軟體、遊戲，或一個剛好用得上的工具。</p>
-              <SiteLink className="text-link" href="/about/">認識 Dynity <Arrow /></SiteLink>
+              <SiteLink className="text-link" href="/about/">認識團隊 <Arrow /></SiteLink>
             </div>
           </div>
         </section>

@@ -143,8 +143,9 @@ test("main navigation, product support, legal links and the old URL work", async
   await expect(page).toHaveURL(/\/work\/island-survival\/$/);
   await expect(page.getByRole("heading", { name: "IslandSurvival", level: 1 })).toBeVisible();
   await expect(page.getByText(/Google Play 即將上架/)).toBeVisible();
-  await nav.getByRole("link", { name: "關於" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Small ideas\.\s*Real things\./);
+  await nav.getByRole("link", { name: "團隊" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("我們是 Dynity");
+  await expect(page.getByRole("heading", { name: "我們怎麼做作品" })).toBeVisible();
   await nav.getByRole("link", { name: "聯絡", exact: true }).click();
   await expect(page.getByRole("link", { name: "寄信給產品支援" })).toHaveAttribute("href", "mailto:cc20110630@gmail.com");
   await expect(page.getByRole("link", { name: "孤島求生隱私權政策" })).toHaveAttribute("href", "https://islandsurvival-privacy.pages.dev/");
@@ -161,7 +162,7 @@ test("returning from another page restores the home scroll position", async ({ p
   const offset = await page.locator("#work").evaluate((section) => Math.floor(section.getBoundingClientRect().top - 300));
   await scroll(page, offset);
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(offset);
-  const about = page.getByRole("navigation", { name: "主要導覽" }).getByRole("link", { name: "關於" });
+  const about = page.getByRole("navigation", { name: "主要導覽" }).getByRole("link", { name: "團隊" });
   const bounds = await about.boundingBox();
   expect(bounds).not.toBeNull();
   // Click the sticky link in place, without the test runner scrolling it into view.

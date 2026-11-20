@@ -4,7 +4,7 @@ import { githubUrl } from "./site-config";
 
 const navigation = [
   { label: "作品", href: "/work/" },
-  { label: "關於", href: "/about/" },
+  { label: "團隊", href: "/about/" },
   { label: "聯絡", href: "/contact/" },
 ];
 
@@ -52,7 +52,7 @@ export function SiteFooter() {
           </div>
           <nav aria-label="頁尾導覽">
             <SiteLink href={projectPath(featuredProject)}>{featuredProject.name}</SiteLink>
-            <SiteLink href="/about/">關於 Dynity</SiteLink>
+            <SiteLink href="/about/">認識團隊</SiteLink>
             <SiteLink href="/contact/">聯絡我們</SiteLink>
             <a href={githubUrl}>GitHub <Arrow direction="external" /></a>
           </nav>
