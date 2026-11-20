@@ -2,7 +2,7 @@ import { SiteLink } from "../site";
 import { islandProject, projectPath } from "../projects";
 import { pageMetadata } from "../site-config";
 
-export const metadata = pageMetadata("認識 Dynity 團隊", "認識 Dynity 這個小型獨立軟體開發團隊，了解我們如何選擇題目、做產品，以及從使用回饋繼續改進。", "/about/");
+export const metadata = pageMetadata("認識 Dynity 團隊", "Dynity 是由 CC 和 Eric 兩位高中生組成的獨立軟體開發團隊。我們一起做 App、遊戲和日常工具。", "/about/");
 
 export default function AboutPage() {
   return (
@@ -10,8 +10,15 @@ export default function AboutPage() {
       <section className="about-intro ink-section" aria-labelledby="about-title">
         <div className="shell">
           <h1 className="display about-display" id="about-title">我們是 <span lang="en" translate="no">Dynity</span></h1>
-          <p className="about-copy">我們是個小型獨立軟體開發團隊。平常遇到一件麻煩的小事，或想到一個自己很想用的工具，我們就想動手把它做出來。這些點子有時會變成 App，有時會變成遊戲。</p>
+          <p className="about-copy">我們是 CC 和 Eric，兩個喜歡做軟體的高中生。Dynity 是我們一起做作品的名字。遇到一件麻煩的小事，或想到一個自己很想玩的遊戲，我們就想動手試試看。</p>
         </div>
+      </section>
+      <section className="shell about-article" aria-labelledby="team-members-title">
+        <h2 className="display sub-title" id="team-members-title">團隊成員</h2>
+        <ul className="team-members" role="list" lang="en" translate="no">
+          <li>CC</li>
+          <li>Eric</li>
+        </ul>
       </section>
       <section className="studio-notes detail-section" aria-labelledby="studio-notes-title">
         <div className="shell">

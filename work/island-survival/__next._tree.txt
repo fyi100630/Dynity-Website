@@ -1,10 +1,10 @@
-:HL["/Dynity-Website/_next/static/chunks/42e4s0rwuknr0.css","style"]
+:HL["/Dynity-Website/_next/static/chunks/4222qxkhsrr6-.css","style"]
 :HL["/Dynity-Website/_next/static/media/bricolage_grotesque_latin_wght_normal-s.p.1iqnhac4m3hwo.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Dynity-Website/_next/static/media/geist_latin_wght_normal-s.p.20f3xrkj613ah.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/Dynity-Website/_next/static/media/noto_sans_tc_subset.p.0aaqmmxurdpyo.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/Dynity-Website/_next/static/media/noto_sans_tc_subset.p.3ylqn2ch02_cz.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Dynity-Website/_next/static/media/scene.43z86xscf8b3x.webp","image",{"imageSrcSet":"/Dynity-Website/_next/static/media/scene-small.2xb6jx8aooq3r.webp 420w, /Dynity-Website/_next/static/media/scene.43z86xscf8b3x.webp 720w","imageSizes":"(max-width: 760px) 90vw, 720px","fetchPriority":"high"}]
 :HL["/Dynity-Website/_next/static/media/island.31nokwzod3bun.webp","image",{"imageSrcSet":"/Dynity-Website/_next/static/media/island-small.2wj-ppkk8whvj.webp 360w, /Dynity-Website/_next/static/media/island.31nokwzod3bun.webp 700w","imageSizes":"(max-width: 760px) 26vw, 210px","fetchPriority":"high"}]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"island-survival","s":[]},"h":65632,"c":"$Q3"}]]
 1:[["children",{"s":"work","h":131168,"c":"$Q2"}]]
-0:{"b":"Z7ZVZtu575H0Sv1siLb3j","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"6QNq1rG3Li1mSLv9WrnjU","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}

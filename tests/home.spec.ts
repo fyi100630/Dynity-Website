@@ -145,6 +145,8 @@ test("main navigation, product support, legal links and the old URL work", async
   await expect(page.getByText(/Google Play 即將上架/)).toBeVisible();
   await nav.getByRole("link", { name: "團隊" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("我們是 Dynity");
+  const members = page.getByRole("region", { name: "團隊成員" });
+  await expect(members.getByRole("listitem")).toHaveText(["CC", "Eric"]);
   await expect(page.getByRole("heading", { name: "我們怎麼做作品" })).toBeVisible();
   await nav.getByRole("link", { name: "聯絡", exact: true }).click();
   await expect(page.getByRole("link", { name: "寄信給產品支援" })).toHaveAttribute("href", "mailto:cc20110630@gmail.com");

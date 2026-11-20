@@ -70,7 +70,7 @@ export default function Home() {
             <h2 id="studio-title" className="display about-display" lang="en">Small ideas.<br />Real things.</h2>
             <div>
               <p className="section-label">關於 Dynity</p>
-              <p className="about-copy">我們是個小型獨立團隊。從平常想用、卻還找不到的東西出發，把點子做成軟體、遊戲，或一個剛好用得上的工具。</p>
+              <p className="about-copy">我們是 CC 和 Eric，兩個一起做 App、遊戲和工具的高中生。Dynity 從我們平常想用、卻還找不到的東西開始。</p>
               <SiteLink className="text-link" href="/about/">認識團隊 <Arrow /></SiteLink>
             </div>
           </div>

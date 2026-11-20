@@ -390,6 +390,23 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
   gap: var(--space-5) clamp(2rem, 8vw, 8rem);
   padding-block: var(--section-space);
 }
+.team-members {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.team-members li {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-3);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.9rem, 4vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.1;
+}
 .content-page > .text-link { margin-top: var(--space-2); }
 .contact-links { border-bottom: 1px solid var(--rule); }
 .contact-links section {
