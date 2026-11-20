@@ -22,7 +22,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         <div className="shell">
           <SiteLink href="/work/" className="text-link back-link"><Arrow /> 所有作品</SiteLink>
           <div className="detail-grid">
-            <div>
+            <div className="detail-copy">
               <div className="spotlight-meta"><span className="section-label">{project.category}</span><ProjectStatus project={project} /></div>
               <h1 className="display spotlight-title" lang="en" translate="no">{project.englishName}</h1>
               <p className="spotlight-line">{project.name}</p>

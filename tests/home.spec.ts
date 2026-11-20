@@ -25,6 +25,31 @@ async function distance(page: Page, from: string, to: string) {
   }, { from, to });
 }
 
+test("IslandSurvival fits on one line on the homepage and project page", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+
+  for (const [path, level] of [["/#featured", 2], ["/work/island-survival/", 1]] as const) {
+    await page.goto(path);
+    await page.evaluate(() => document.fonts.ready);
+    const title = page.getByRole("heading", { name: "IslandSurvival", exact: true, level });
+
+    for (const width of [1920, 2560, 1440, 1024, 761, 760, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      const { lines, fits } = await title.evaluate((heading) => {
+        const text = document.createRange();
+        text.selectNodeContents(heading);
+        const rects = Array.from(text.getClientRects());
+        const bounds = heading.getBoundingClientRect();
+        return {
+          lines: rects.length,
+          fits: rects.every((rect) => rect.left >= bounds.left - 1 && rect.right <= bounds.right + 1),
+        };
+      });
+      expect({ lines, fits }, `${path} at ${width}px`).toEqual({ lines: 1, fits: true });
+    }
+  }
+});
+
 test("the desktop wordmark lands in the header and retraces its path", async ({ page }) => {
   await page.setViewportSize(desktop);
   const errors: string[] = [];
