@@ -31,8 +31,8 @@
   --shell: 96rem;
   --header-height: 4.5rem;
   --focus-offset: 5px;
-  --media-radius: clamp(1.125rem, 2.6vw, 2rem);
-  --screenshot-radius: clamp(.875rem, 1.6vw, 1.375rem);
+  --artwork-radius: 13% / 18%;
+  --screenshot-radius: clamp(1.5rem, 3.1vw, 2.75rem);
   --ease-ui: cubic-bezier(.22, .61, .36, 1);
   --time-ui: 180ms;
 }
@@ -280,7 +280,7 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
   inset: 0;
   overflow: hidden;
   background: var(--project-frame);
-  border-radius: var(--media-radius);
+  border-radius: var(--artwork-radius);
   transform-origin: 0 0;
   pointer-events: none;
 }
@@ -301,10 +301,10 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
   padding: 1%;
   background: #142733;
   border: 1px solid #e2eff57a;
-  border-radius: 9% / 4.15%;
+  border-radius: 16.5% / 7.6%;
   box-shadow: 0 .7rem 2.2rem #071a292e;
 }
-.artwork-phone img { width: 100%; border-radius: 6% / 2.75%; }
+.artwork-phone img { width: 100%; border-radius: 14.5% / 6.7%; }
 
 .home-work { position: relative; padding-block: var(--section-space); }
 .section-heading { display: flex; align-items: baseline; gap: var(--space-2) clamp(1.25rem, 4vw, 4.5rem); flex-wrap: wrap; margin-bottom: var(--space-5); }
@@ -342,7 +342,7 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
 .story-split .body-copy { margin-top: var(--space-3); }
 .story-split .text-link { margin-top: var(--space-2); }
 .home-field-note { position: relative; margin-top: clamp(3rem, 7vw, 7rem); }
-.field-note-image { width: 100%; border-radius: var(--media-radius); }
+.field-note-image { width: 100%; border-radius: 12% / 23%; }
 
 .ink-section, .site-footer { color: var(--paper); }
 .ink-section :focus-visible, .site-footer :focus-visible { outline-color: var(--studio-accent); }

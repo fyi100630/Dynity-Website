@@ -1,4 +1,4 @@
-:HL["/Dynity-Website/_next/static/chunks/296izbr95kay_.css","style"]
+:HL["/Dynity-Website/_next/static/chunks/2uim62k-13mvj.css","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"/_not-found","h":96,"c":"$Q2"}]]
-0:{"b":"0_p5s4U99MGlf0SJOAZJ9","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"hSSpZPkVjundSV6e8BiRN","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
