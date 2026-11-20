@@ -25,27 +25,36 @@ async function distance(page: Page, from: string, to: string) {
   }, { from, to });
 }
 
-test("IslandSurvival fits on one line on the homepage and project page", async ({ page }) => {
+test("IslandSurvival fits on one line with both web and fallback fonts", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  const pages = [["/#featured", 2], ["/work/", 3], ["/work/island-survival/", 1]] as const;
 
-  for (const [path, level] of [["/#featured", 2], ["/work/island-survival/", 1]] as const) {
-    await page.goto(path);
-    await page.evaluate(() => document.fonts.ready);
-    const title = page.getByRole("heading", { name: "IslandSurvival", exact: true, level });
+  for (const font of ["web", "fallback"] as const) {
+    if (font === "fallback") await page.route("**/*.woff2", (route) => route.abort());
 
-    for (const width of [1920, 2560, 1440, 1024, 761, 760, 390, 320]) {
-      await page.setViewportSize({ width, height: 900 });
-      const { lines, fits } = await title.evaluate((heading) => {
-        const text = document.createRange();
-        text.selectNodeContents(heading);
-        const rects = Array.from(text.getClientRects());
-        const bounds = heading.getBoundingClientRect();
-        return {
-          lines: rects.length,
-          fits: rects.every((rect) => rect.left >= bounds.left - 1 && rect.right <= bounds.right + 1),
-        };
-      });
-      expect({ lines, fits }, `${path} at ${width}px`).toEqual({ lines: 1, fits: true });
+    for (const [path, level] of pages) {
+      await page.goto(path);
+      if (font === "fallback") {
+        await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+      }
+      await page.evaluate(() => document.fonts.ready);
+      const title = page.getByRole("heading", { name: "IslandSurvival", exact: true, level });
+      await expect(title).toHaveCSS("white-space", "nowrap");
+
+      for (const width of [1920, 2560, 1440, 1024, 761, 760, 390, 320]) {
+        await page.setViewportSize({ width, height: 900 });
+        const { lines, fits } = await title.evaluate((heading) => {
+          const text = document.createRange();
+          text.selectNodeContents(heading);
+          const rects = Array.from(text.getClientRects());
+          const bounds = heading.getBoundingClientRect();
+          return {
+            lines: rects.length,
+            fits: rects.every((rect) => rect.left >= bounds.left - 1 && rect.right <= bounds.right + 1),
+          };
+        });
+        expect({ lines, fits }, `${path} at ${width}px with ${font} font`).toEqual({ lines: 1, fits: true });
+      }
     }
   }
 });

@@ -59,6 +59,18 @@ export function ProjectStatus({ project }: { project: Project }) {
   return <span className="project-status">{statusLabels[project.status]}</span>;
 }
 
+export function ProjectTitle({ project, as: Heading, className, id }: {
+  project: Project;
+  as: "h1" | "h2" | "h3";
+  className?: string;
+  id?: string;
+}) {
+  const classes = [className, project.singleLineTitle ? "project-title-single-line" : undefined]
+    .filter(Boolean)
+    .join(" ");
+  return <Heading className={classes || undefined} id={id} lang="en" translate="no">{project.englishName}</Heading>;
+}
+
 export function WorkList({ items, sharedSlug, showSummaries }: { items: readonly Project[]; sharedSlug?: string; showSummaries?: boolean }) {
   return (
     <ul className="work-list" role="list">
@@ -66,7 +78,7 @@ export function WorkList({ items, sharedSlug, showSummaries }: { items: readonly
         <li key={project.slug}>
           <SiteLink className="work-row" href={projectPath(project)} style={projectTheme(project)}>
             <div className="work-row-copy">
-              <h3 lang="en" translate="no">{project.englishName}</h3>
+              <ProjectTitle project={project} as="h3" />
               <p className="work-row-meta"><span>{project.name}</span><span>{project.category}</span><ProjectStatus project={project} /></p>
               {showSummaries && <p className="work-row-summary body-copy">{project.summary}</p>}
             </div>

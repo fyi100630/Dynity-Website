@@ -25,6 +25,7 @@ type ProjectStatus = "released" | "in-development" | "experimental";
 export type Project = {
   name: string;
   englishName: string;
+  singleLineTitle?: boolean;
   slug: string;
   summary: string;
   tagline?: string;
@@ -59,6 +60,7 @@ export const statusLabels: Record<ProjectStatus, string> = {
 export const islandProject = {
   name: "孤島求生",
   englishName: "IslandSurvival",
+  singleLineTitle: true,
   slug: "island-survival",
   category: "專注計時 × 島嶼經營",
   tagline: "孤島求生。讓專注長成一座島。",

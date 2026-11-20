@@ -259,7 +259,7 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
   align-items: center;
 }
 .spotlight-copy, .home-work-heading, .work-row-copy, .work-row-arrow { position: relative; z-index: 3; }
-.spotlight-copy, .detail-copy { container-type: inline-size; }
+.spotlight-copy, .detail-copy, .work-row-copy { container-type: inline-size; }
 .spotlight-meta { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .project-status {
   display: inline-flex;
@@ -272,12 +272,13 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
 }
 .project-status::before { content: ""; width: .42rem; height: .42rem; border-radius: 50%; background: var(--blue); }
 .spotlight-title {
-  --spotlight-title-size: clamp(2.5rem, 5.2vw, 6rem);
+  --spotlight-title-size: min(5.2vw, 4.75rem);
   margin-block: var(--space-3);
-  font-size: min(var(--spotlight-title-size), 5rem);
-  font-size: min(var(--spotlight-title-size), 14.75cqi);
+  font-size: var(--spotlight-title-size);
+  font-size: min(var(--spotlight-title-size), 13.75cqi);
   overflow-wrap: anywhere;
 }
+.project-title-single-line { white-space: nowrap; }
 .spotlight-line { margin-bottom: var(--space-2); font-weight: 700; font-size: clamp(1.25rem, 1.85vw, 1.7rem); line-height: 1.45; }
 
 .artwork-frame { position: relative; min-width: 0; aspect-ratio: 1.38; }
@@ -328,8 +329,10 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
 }
 .work-row-copy { min-width: 0; }
 .work-row h3 {
+  --work-title-size: clamp(1.65rem, 4vw, 4rem);
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.65rem, 4vw, 4rem);
+  font-size: var(--work-title-size);
+  font-size: min(var(--work-title-size), 13.75cqi);
   font-weight: 700;
   letter-spacing: -.06em;
   line-height: 1.06;
@@ -509,7 +512,7 @@ html:has(.header-brand:focus-visible) [data-hero-wordmark] { opacity: 1 !importa
   .hero-bottom { position: static; transform: none; justify-content: center; padding-inline: 0; }
   .spotlight { padding-block: var(--section-space); }
   .spotlight-inner, .detail-grid { grid-template-columns: 1fr; gap: var(--space-5); }
-  .spotlight-title { --spotlight-title-size: clamp(2.75rem, 9.7vw, 4.5rem); }
+  .spotlight-title { --spotlight-title-size: min(10.4vw, 4.5rem); }
   .actions { margin-top: var(--space-4); }
   .section-heading { margin-bottom: var(--space-3); }
   .work-row { grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-3); }

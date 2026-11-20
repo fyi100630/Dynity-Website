@@ -1,4 +1,4 @@
-import { projectTheme, ProjectArtwork, ProjectStatus, ResponsiveImage } from "./project-ui";
+import { projectTheme, ProjectArtwork, ProjectStatus, ProjectTitle, ResponsiveImage } from "./project-ui";
 import { type Project, projectPath } from "./projects";
 import { SiteLink, Arrow, JsonLd } from "./site";
 import { absoluteUrl } from "./site-config";
@@ -24,7 +24,7 @@ export function ProjectDetail({ project }: { project: Project }) {
           <div className="detail-grid">
             <div className="detail-copy">
               <div className="spotlight-meta"><span className="section-label">{project.category}</span><ProjectStatus project={project} /></div>
-              <h1 className="display spotlight-title" lang="en" translate="no">{project.englishName}</h1>
+              <ProjectTitle project={project} as="h1" className="display spotlight-title" />
               <p className="spotlight-line">{project.name}</p>
               <p className="body-copy">{project.description}</p>
               <div className="actions">

@@ -1,7 +1,7 @@
 import { SiteLink, Arrow, JsonLd, Wordmark } from "./site";
 import { absoluteUrl, siteDescription } from "./site-config";
 import { featuredProject, projects, projectPath } from "./projects";
-import { ProjectArtwork, ProjectStatus, ResponsiveImage, WorkList, projectTheme } from "./project-ui";
+import { ProjectArtwork, ProjectStatus, ProjectTitle, ResponsiveImage, WorkList, projectTheme } from "./project-ui";
 import { StoryMotion } from "./story-motion";
 
 export default function Home() {
@@ -30,7 +30,7 @@ export default function Home() {
           <div className="shell spotlight-inner">
             <div className="spotlight-copy">
               <div className="spotlight-meta"><span className="section-label">精選作品</span><ProjectStatus project={project} /></div>
-              <h2 id="spotlight-title" className="display spotlight-title" lang="en" translate="no">{project.englishName}</h2>
+              <ProjectTitle project={project} as="h2" id="spotlight-title" className="display spotlight-title" />
               <p className="spotlight-line">{project.tagline ?? project.name}</p>
               <p className="body-copy">{project.summary}</p>
               <div className="actions">
