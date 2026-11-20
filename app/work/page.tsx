@@ -13,7 +13,7 @@ export default function WorkPage() {
       </section>
       <section aria-labelledby="project-list-title">
         <h2 className="sr-only" id="project-list-title">所有作品</h2>
-        <WorkList items={projects} />
+        <WorkList items={projects} showSummaries />
       </section>
     </div>
   );

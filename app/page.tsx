@@ -1,7 +1,7 @@
 import { SiteLink, Arrow, JsonLd, Wordmark } from "./site";
 import { absoluteUrl, siteDescription } from "./site-config";
 import { featuredProject, projects, projectPath } from "./projects";
-import { ProjectArtwork, ProjectStatus, WorkList, projectTheme } from "./project-ui";
+import { ProjectArtwork, ProjectStatus, ResponsiveImage, WorkList, projectTheme } from "./project-ui";
 import { StoryMotion } from "./story-motion";
 
 export default function Home() {
@@ -52,6 +52,16 @@ export default function Home() {
               <SiteLink className="text-link" href="/work/">查看所有作品 <Arrow /></SiteLink>
             </div>
             <WorkList items={projects} sharedSlug={project.slug} />
+            {project.fieldNote && (
+              <section className="home-field-note story-split" aria-labelledby="home-field-note-title">
+                <div>
+                  <h3 id="home-field-note-title" className="display sub-title">{project.fieldNote.title}</h3>
+                  <p className="body-copy">{project.fieldNote.summary}</p>
+                  <SiteLink href={`${projectPath(project)}#island-life`} className="text-link">看看島上還能做什麼</SiteLink>
+                </div>
+                <ResponsiveImage className="field-note-image" image={project.fieldNote.image} sizes="(max-width: 760px) 90vw, 54vw" />
+              </section>
+            )}
           </div>
         </section>
         <section className="home-about ink-section" id="studio" aria-labelledby="studio-title">

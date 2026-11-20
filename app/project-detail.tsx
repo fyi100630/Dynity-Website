@@ -29,6 +29,7 @@ export function ProjectDetail({ project }: { project: Project }) {
               <p className="body-copy">{project.description}</p>
               <div className="actions">
                 {project.website && <a className="button" href={project.website}>前往產品網站 <Arrow direction="external" /></a>}
+                {project.screenshots.length > 0 && <a className="text-link" href="#how-it-works">看遊玩流程</a>}
                 {project.repository && <a className="text-link" href={project.repository}>GitHub <Arrow direction="external" /></a>}
               </div>
             </div>
@@ -38,7 +39,7 @@ export function ProjectDetail({ project }: { project: Project }) {
       </header>
       {project.screenshots.length > 0 && (
         <section className="shell detail-section" id="how-it-works" aria-labelledby="how-title">
-          <h2 id="how-title" className="display sub-title">實機畫面</h2>
+          <h2 id="how-title" className="display sub-title">從一段專注到一座島</h2>
           <ol className="screenshot-list" role="list">
             {project.screenshots.map((item) => (
               <li key={item.title}>
@@ -46,10 +47,44 @@ export function ProjectDetail({ project }: { project: Project }) {
                   <h3>{item.title}</h3>
                   <p className="body-copy">{item.description}</p>
                 </div>
-                <ResponsiveImage image={item.image} sizes="(max-width: 760px) 68vw, 264px" />
+                <ResponsiveImage image={item.image} sizes="(max-width: 600px) 31vw, (max-width: 960px) 43vw, 22vw" />
               </li>
             ))}
           </ol>
+        </section>
+      )}
+      {project.fieldNote && (
+        <section className="project-life detail-section" id="island-life" aria-labelledby="island-life-title">
+          <div className="shell">
+            <div className="story-split">
+              <div>
+                <h2 className="display sub-title" id="island-life-title">{project.fieldNote.title}</h2>
+                <p className="body-copy">{project.fieldNote.summary}</p>
+              </div>
+              <ResponsiveImage className="field-note-image" image={project.fieldNote.image} sizes="(max-width: 760px) 90vw, 54vw" />
+            </div>
+            <ul className="editorial-list" role="list">
+              {project.fieldNote.topics.map((topic) => (
+                <li key={topic.title}>
+                  <h3>{topic.title}</h3>
+                  <p className="body-copy">{topic.description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+      {project.faq && project.faq.length > 0 && (
+        <section className="shell detail-section faq-section" aria-labelledby="faq-title">
+          <h2 className="display sub-title" id="faq-title">開始之前</h2>
+          <div className="faq-list">
+            {project.faq.map(({ question, answer }) => (
+              <details key={question}>
+                <summary>{question}</summary>
+                <p className="body-copy">{answer}</p>
+              </details>
+            ))}
+          </div>
         </section>
       )}
       {(project.releaseNote || project.support) && (

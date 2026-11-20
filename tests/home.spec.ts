@@ -119,6 +119,19 @@ test.describe("without JavaScript", () => {
     await page.getByRole("link", { name: "作品介紹" }).click();
     await expect(page).toHaveURL(/\/work\/island-survival\/$/);
   });
+
+  test("links from the island story to the expanded content and opens questions by keyboard", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("link", { name: "看看島上還能做什麼" }).click();
+    await expect(page).toHaveURL(/\/work\/island-survival\/#island-life$/);
+    await expect(page.getByRole("heading", { name: "小島有自己的日常" })).toBeInViewport();
+    await expect(page.locator("#how-it-works img")).toHaveCount(4);
+
+    const answer = page.getByText(/訪客模式可以玩單人內容/);
+    await expect(answer).toBeHidden();
+    await page.locator("summary").filter({ hasText: "需要先登入嗎？" }).press("Enter");
+    await expect(answer).toBeVisible();
+  });
 });
 
 test("main navigation, product support, legal links and the old URL work", async ({ page }) => {

@@ -59,7 +59,7 @@ export function ProjectStatus({ project }: { project: Project }) {
   return <span className="project-status">{statusLabels[project.status]}</span>;
 }
 
-export function WorkList({ items, sharedSlug }: { items: readonly Project[]; sharedSlug?: string }) {
+export function WorkList({ items, sharedSlug, showSummaries }: { items: readonly Project[]; sharedSlug?: string; showSummaries?: boolean }) {
   return (
     <ul className="work-list" role="list">
       {items.map((project) => (
@@ -67,7 +67,8 @@ export function WorkList({ items, sharedSlug }: { items: readonly Project[]; sha
           <SiteLink className="work-row" href={projectPath(project)} style={projectTheme(project)}>
             <div className="work-row-copy">
               <h3 lang="en" translate="no">{project.englishName}</h3>
-              <p><span>{project.name}</span><span>{project.category}</span><ProjectStatus project={project} /></p>
+              <p className="work-row-meta"><span>{project.name}</span><span>{project.category}</span><ProjectStatus project={project} /></p>
+              {showSummaries && <p className="work-row-summary body-copy">{project.summary}</p>}
             </div>
             <div className="artwork-frame work-row-artwork" data-artwork-destination={project.slug === sharedSlug || undefined}>
               <ProjectArtwork project={project} compact />
